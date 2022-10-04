@@ -28,11 +28,7 @@ def arithmetic_arranger(problems, results = False):
         len_op1 = len(problem[0])
         len_op2 = len(problem[2])
 
-        # Check spaces to add to the shortest operator
-        #spaces = len(problem[0]) - len(problem[2])
-        #if spaces < 0:
-        #    spaces = spaces * -1
-
+        # Check wich operator is the longest
         if len_op1 > len_op2:
             line1 = line1 + (' ' * 2) + problem[0] + spaces_btw_problems
             line2 = line2 + problem[1] + ' ' + (' ' * (len_op1 - len_op2)) + problem[2] + spaces_btw_problems
@@ -45,6 +41,12 @@ def arithmetic_arranger(problems, results = False):
             line1 = line1 + (' ' * 2) + problem[0] + spaces_btw_problems
             line2 = line2 + problem[1] + ' ' + problem[2] + spaces_btw_problems
             line3 = line3 + ('-' * (len_op2 + 2)) + spaces_btw_problems
+
+    # The for statment has a problem adding spaces: it adds in the last iteration
+    # we are going to delete that spaces
+    line1 = line1[:-4]
+    line2 = line2[:-4]
+    line3 = line3[:-4]
 
     arranged_problems = line1 + "\n" + line2 + "\n" + line3
 
