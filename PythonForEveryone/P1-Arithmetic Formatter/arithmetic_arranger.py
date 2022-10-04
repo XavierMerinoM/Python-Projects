@@ -36,15 +36,15 @@ def arithmetic_arranger(problems, results = False):
         if len_op1 > len_op2:
             line1 = line1 + (' ' * 2) + problem[0] + spaces_btw_problems
             line2 = line2 + problem[1] + ' ' + (' ' * (len_op1 - len_op2)) + problem[2] + spaces_btw_problems
-            line3 = ('-' * (len_op1 + 2)) + spaces_btw_problems
+            line3 = line3 + ('-' * (len_op1 + 2)) + spaces_btw_problems
         elif len_op2 > len_op1:
             line1 = line1 + (' ' * 2) + (' ' * (len_op2 - len_op1)) + problem[0] + spaces_btw_problems
             line2 = line2 + problem[1] + ' ' + problem[2] + spaces_btw_problems
-            line3 = ('-' * (len_op2 + 2)) + spaces_btw_problems
+            line3 = line3 + ('-' * (len_op2 + 2)) + spaces_btw_problems
         else:
             line1 = line1 + (' ' * 2) + problem[0] + spaces_btw_problems
             line2 = line2 + problem[1] + ' ' + problem[2] + spaces_btw_problems
-            line3 = ('-' * (len_op2 + 2)) + spaces_btw_problems
+            line3 = line3 + ('-' * (len_op2 + 2)) + spaces_btw_problems
 
     arranged_problems = line1 + "\n" + line2 + "\n" + line3
 
