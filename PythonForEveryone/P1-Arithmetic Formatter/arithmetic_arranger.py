@@ -17,16 +17,36 @@ def arithmetic_arranger(problems, results = False):
     line1 = ""
     line2 = ""
     line3 = ""
+    arranged_problems = ""
+    spaces_btw_problems = ' ' * 4
+
     for problem in problems:
+        # Split the input
         problem = problem.split()
 
-        spaces = len(problem[0]) - len(problem[2])
-        if spaces < 0:
-            spaces = spaces * -1
+        # Save the lenghts of the inputs
+        len_op1 = len(problem[0])
+        len_op2 = len(problem[2])
 
-        line2 = line2 + (problem[1] + (' ' * spaces))
+        # Check spaces to add to the shortest operator
+        #spaces = len(problem[0]) - len(problem[2])
+        #if spaces < 0:
+        #    spaces = spaces * -1
 
-    arranged_problems = "OK"
+        if len_op1 > len_op2:
+            line1 = line1 + (' ' * 2) + problem[0] + spaces_btw_problems
+            line2 = line2 + problem[1] + ' ' + (' ' * (len_op1 - len_op2)) + problem[2] + spaces_btw_problems
+            line3 = ('-' * (len_op1 + 2)) + spaces_btw_problems
+        elif len_op2 > len_op1:
+            line1 = line1 + (' ' * 2) + (' ' * (len_op2 - len_op1)) + problem[0] + spaces_btw_problems
+            line2 = line2 + problem[1] + ' ' + problem[2] + spaces_btw_problems
+            line3 = ('-' * (len_op2 + 2)) + spaces_btw_problems
+        else:
+            line1 = line1 + (' ' * 2) + problem[0] + spaces_btw_problems
+            line2 = line2 + problem[1] + ' ' + problem[2] + spaces_btw_problems
+            line3 = ('-' * (len_op2 + 2)) + spaces_btw_problems
+
+    arranged_problems = line1 + "\n" + line2 + "\n" + line3
 
     return arranged_problems
 
@@ -68,6 +88,6 @@ def problem_checker(problems):
             message = "Error: Numbers cannot be more than four digits."  
             return message
         
-        print(problem)
+        # print(problem)
     
     return message
