@@ -12,6 +12,9 @@
 # are valid times. The minutes in the duration time will be a whole
 # number less than 60, but the hour can be any whole number.
 
+from unittest import result
+
+
 def add_time(start, duration):
     # Initialize variables
     new_time = ''
@@ -35,7 +38,7 @@ def add_time(start, duration):
     result_minutes = process_minutes(result_minutes)
 
     # process_hours
-    # 0: final time result
+    # 0: result in 12 hour format
     # 1: how many cycles of 12 hours have the result
     result_time = process_hours(result_hour, result_minutes[1])
 
@@ -43,9 +46,55 @@ def add_time(start, duration):
     # print(result_time)
     # print(str(result_time[0]) + ':' + str(result_minutes[0]))
 
-    # new_time = format_result(result_minutes[0], result_time, start[1])
+    # print(result_minutes[0], result_time, start[1])
+
+    # Takes the result and formats it
+    new_time = format_result(result_minutes[0], result_time[0], result_time[1], start[1])
 
     return new_time
+
+# This function checks the results and adjusts it to the desired final output
+def format_result(minutes, hour, cycles, day_period):
+    # Add hour and colon
+    result = str(hour) + ':'
+
+    # To add minutes first it is necessary check if the number is < 10 to add a zero
+    if minutes < 10:
+        result += '0'
+
+    result += str(minutes)
+
+    # Add an space before day period
+    result += ' '
+
+    # If there is no cycle, return the result as it is
+    if cycles == 0:
+        result += day_period
+        return result
+
+    # Check the cycles to define the day period (AM or PM)
+    # Hint: the period only changes if the number of cycles is odd
+    print(str(cycles))
+    if cycles % 2 == 1:
+        if day_period == 'AM':
+            result += 'PM'
+        elif day_period == 'PM':
+            result += 'AM'
+    else:
+        result += day_period
+
+    # If the result will be the next day, it should show (next day) after the time.
+    # If the result will be more than one day later, it should show (n days later)
+    # after the time, where "n" is the number of days later.
+    # Hint: Depending on the period, days are going to be added
+    # if it is PM, one period adds a day, in consequence, odds numbers add a day
+    # if it is AM, two periods add a day, in consequence, even numbers add a day
+
+    # First, we need to check if it is next day
+    # if cycles <= 2:
+    # if day_period == 'PM':
+
+    return result
 
 # Add the hours of the parameters of the add_time function
 def add_hours(start_hour, duration_hour):
