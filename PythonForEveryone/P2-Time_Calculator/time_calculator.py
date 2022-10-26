@@ -55,6 +55,9 @@ def add_time(start, duration):
 
 # This function checks the results and adjusts it to the desired final output
 def format_result(minutes, hour, cycles, day_period):
+    # Declare initial variables
+    number_days = 0
+
     # Add hour and colon
     result = str(hour) + ':'
 
@@ -73,8 +76,7 @@ def format_result(minutes, hour, cycles, day_period):
         return result
 
     # Check the cycles to define the day period (AM or PM)
-    # Hint: the period only changes if the number of cycles is odd
-    print(str(cycles))
+    # Hint: the text period only changes if the number of cycles is odd
     if cycles % 2 == 1:
         if day_period == 'AM':
             result += 'PM'
@@ -86,13 +88,38 @@ def format_result(minutes, hour, cycles, day_period):
     # If the result will be the next day, it should show (next day) after the time.
     # If the result will be more than one day later, it should show (n days later)
     # after the time, where "n" is the number of days later.
+
     # Hint: Depending on the period, days are going to be added
-    # if it is PM, one period adds a day, in consequence, odds numbers add a day
+    # Cycles move in AM-PM through time, so we have a pattern!
+    # if it is PM, next period adds a day, in consequence, odds numbers add a day
     # if it is AM, two periods add a day, in consequence, even numbers add a day
 
-    # First, we need to check if it is next day
-    # if cycles <= 2:
-    # if day_period == 'PM':
+    # Next day cases:
+    # In PM case, one and two cycles show next day
+    if day_period == 'PM':
+        if cycles == 1 or cycles == 2:
+            result += ' (next day)'
+            return result
+
+    # In AM case, two and three cycles show next day
+    if day_period == 'AM':
+        if cycles == 2 or cycles == 3:
+            result += ' (next day)'
+            return result
+
+    # n days later cases
+    # In both cases we have to do an integer division by 2 to get the number of days
+    number_days = cycles // 2
+
+    # However, in PM case, check the remainder
+    # If there is a remainder, the number is odd.
+    # So, check it and add one if it exists
+    if day_period == 'PM':
+        number_days += cycles % 2 > 0
+
+    # Add text to the result (if it is necessary)
+    if number_days > 0:
+        result += ' (' + str(number_days) + ' days later)'
 
     return result
 
