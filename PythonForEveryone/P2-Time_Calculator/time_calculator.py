@@ -14,7 +14,6 @@
 
 from unittest import result
 
-
 def add_time(start, duration, day_week = ''):
     # Initialize variables
     new_time = ''
