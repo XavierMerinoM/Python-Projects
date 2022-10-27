@@ -15,7 +15,7 @@
 from unittest import result
 
 
-def add_time(start, duration):
+def add_time(start, duration, day_week = ''):
     # Initialize variables
     new_time = ''
 
@@ -49,14 +49,21 @@ def add_time(start, duration):
     # print(result_minutes[0], result_time, start[1])
 
     # Takes the result and formats it
-    new_time = format_result(result_minutes[0], result_time[0], result_time[1], start[1])
+    new_time = format_result(result_minutes[0], result_time[0], result_time[1], start[1], day_week)
 
     return new_time
 
 # This function checks the results and adjusts it to the desired final output
-def format_result(minutes, hour, cycles, day_period):
+def format_result(minutes, hour, cycles, day_period, day_week):
     # Declare initial variables
     number_days = 0
+    l_day_week = False
+
+    # If variable has a value, correct it and assign value to the variable
+    # (capitalize only the first letter)
+    if len(day_week) > 0:
+        l_day_week = True
+        day_week = day_week[0].upper() + day_week[1:].lower()
 
     # Add hour and colon
     result = str(hour) + ':'
@@ -71,8 +78,10 @@ def format_result(minutes, hour, cycles, day_period):
     result += ' '
 
     # If there is no cycle, return the result as it is
+    # The one line if is just a fancy solution
+    # To sum up, if the paraneter is sent, we add the day of the week
     if cycles == 0:
-        result += day_period
+        result += day_period + (', ' + day_week if l_day_week else '')
         return result
 
     # Check the cycles to define the day period (AM or PM)
@@ -98,12 +107,14 @@ def format_result(minutes, hour, cycles, day_period):
     # In PM case, one and two cycles show next day
     if day_period == 'PM':
         if cycles == 1 or cycles == 2:
+            result += ', ' + get_day_week(day_week, 1) if l_day_week else ''
             result += ' (next day)'
             return result
 
     # In AM case, two and three cycles show next day
     if day_period == 'AM':
         if cycles == 2 or cycles == 3:
+            result += ', ' + get_day_week(day_week, 1) if l_day_week else ''
             result += ' (next day)'
             return result
 
@@ -117,11 +128,31 @@ def format_result(minutes, hour, cycles, day_period):
     if day_period == 'PM':
         number_days += cycles % 2 > 0
 
+    result += ', ' + get_day_week(day_week, number_days) if l_day_week else ''
+
     # Add text to the result (if it is necessary)
     if number_days > 0:
         result += ' (' + str(number_days) + ' days later)'
 
     return result
+
+# Returns the day of the week given the day and number of days to add
+def get_day_week(day, add):
+    # Helps me to process the day and its number
+    days_week = {'Sunday' : 0, 'Monday' : 1, 'Tuesday' : 2, 'Wednesday' : 3, 'Thursday' : 4,
+                'Friday' : 5, 'Saturday' : 6}
+    lst_days_week = list(days_week)
+
+    # Add the number of the day and days
+    real_day = days_week[day] + add
+
+    # The result is above 7 so a trick is used
+    # Get the value through remainder
+    # This is the real day of week
+    real_day = real_day % 7
+
+    # Get the day of the week from the list
+    return lst_days_week[real_day]
 
 # Add the hours of the parameters of the add_time function
 def add_hours(start_hour, duration_hour):
