@@ -75,6 +75,17 @@ class Category:
         else:
             return False
 
+    # Special function to use in the create_spend_chart function
+    # Returns the sum of withdraws
+    def get_spent(self):
+        result = 0
+
+        for value in self.ledger[0]["amount"]:
+            if value < 0:
+                result += value
+
+        return round(result, 2)
+
     # When the budget object is printed it should display:
     # * A title line of 30 characters where the name
     #   of the category is centered in a line of
@@ -132,4 +143,51 @@ class Category:
         return message
 
 def create_spend_chart(categories):
-    pass
+    # Initialize variables
+    message = ''
+    total = 0
+    percentage = 0
+    data = {}
+    ordered_data = {}
+
+    # Show the first message
+    message += 'Percentage spent by category' + '\n'
+
+    # Get data from the list categories in a dictionary
+    for category in categories:
+        data[category.category] = category.get_spent()
+
+    # Sum values to get percentages later
+    total = sum(data.values())
+
+    # Order (reverse) the dictionary value
+    for key in sorted(data, key=data.get):
+        # Get the percentage
+        percentage = round((data[key] / total) * 100, 0)
+        # To round down, get the decimal value and then multiply by 10
+        percentage = (percentage // 10) * 10
+        ordered_data[key] = percentage
+
+    # print(ordered_data)
+
+    # Print percentage section
+    for perc in range(100, -1, -10):
+        if len(str(perc)) == 2:
+            message += ' '
+        elif len(str(perc)) == 1:
+            message += '  '
+
+        message += str(perc) + '| '
+
+        # Check the dictionary to add 'o' char
+        # If actual value equals percentage, add
+        # Else, break the for adding a new line
+        for key in ordered_data:
+            if ordered_data[key] >= perc:
+                message += 'o  '
+            else:
+                break
+
+        message += '\n'
+
+    return message
