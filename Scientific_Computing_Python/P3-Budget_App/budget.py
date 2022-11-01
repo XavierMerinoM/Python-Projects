@@ -149,12 +149,18 @@ def create_spend_chart(categories):
     percentage = 0
     data = {}
     ordered_data = {}
+    max_len = 0
 
     # Show the first message
     message += 'Percentage spent by category' + '\n'
 
     # Get data from the list categories in a dictionary
     for category in categories:
+        # Check max length of the categories. Will use it later.
+        aux = len(category.category)
+        if aux > max_len:
+            max_len = aux
+
         data[category.category] = category.get_spent()
 
     # Sum values to get percentages later
@@ -168,10 +174,9 @@ def create_spend_chart(categories):
         percentage = (percentage // 10) * 10
         ordered_data[key] = percentage
 
-    # print(ordered_data)
-
     # Print percentage section
     for perc in range(100, -1, -10):
+        # Depending on the len of the number, add space(s)
         if len(str(perc)) == 2:
             message += ' '
         elif len(str(perc)) == 1:
@@ -181,12 +186,33 @@ def create_spend_chart(categories):
 
         # Check the dictionary to add 'o' char
         # If actual value equals percentage, add
-        # Else, break the for adding a new line
+        # Else, break
         for key in ordered_data:
             if ordered_data[key] >= perc:
                 message += 'o  '
             else:
                 break
+
+        message += '\n'
+
+    # First, add some chars according to the format
+    # It is 3 hypens per each category plus the initial hypen
+    # And new line
+    message += ' ' * 4 + ' ' + '---' * (len(categories)) + '\n'
+
+    # Add text in vertical orientation
+    # This for goes to the index of longest key
+    for i in range(max_len):
+        # Always add initial 5 spaces
+        message += ' ' * 5
+
+        # Adds texts char by char cheking it
+        # If there is no char, add spaces
+        for key in ordered_data:
+            if i <= len(key) - 1:
+                message += key[i] + '  '
+            else:
+                message += ' ' * 3
 
         message += '\n'
 
