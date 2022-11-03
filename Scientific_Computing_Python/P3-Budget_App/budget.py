@@ -7,7 +7,7 @@
 # instance variable called ledger that is a list.
 class Category:
     def __init__(self, category):
-        self.ledger = [{"amount": [], "description": []}]
+        self.ledger = []
         self.category = category
 
     # A deposit method that accepts an amount and
@@ -17,14 +17,18 @@ class Category:
     # ledger list in the form of
     # {"amount": amount, "description": description}.
     def deposit(self, amount, description = ''):
-        self.ledger[0]["amount"].append(amount)
-        self.ledger[0]["description"].append(description)
+        self.ledger.append({"amount": amount, "description": description})
 
     # A get_balance method that returns the current
     # balance of the budget category based on the
     # deposits and withdrawals that have occurred.
     def get_balance(self):
-        return sum(self.ledger[0]['amount'])
+        result = 0
+
+        for i in range(len(self.ledger)):
+            result += self.ledger[i]['amount']
+
+        return result
 
     # A check_funds method that accepts an amount as an
     # argument. It returns False if the amount is
@@ -48,8 +52,7 @@ class Category:
     def withdraw(self, amount, description = ''):
         if self.check_funds(amount):
             amount *= -1
-            self.ledger[0]["amount"].append(amount)
-            self.ledger[0]["description"].append(description)
+            self.ledger.append({"amount": amount, "description": description})
 
             return True
         else:
@@ -80,7 +83,9 @@ class Category:
     def get_spent(self):
         result = 0
 
-        for value in self.ledger[0]["amount"]:
+        for i in range(len(self.ledger)):
+            value = self.ledger[i]["amount"]
+
             if value < 0:
                 result += value
 
@@ -118,13 +123,17 @@ class Category:
         message += '\n'
 
         # List items from ledger
-        for i in range(len(self.ledger[0]["amount"])):
-            description = self.ledger[0]["description"][i]
-            amount = str(self.ledger[0]["amount"][i])
+        for i in range(len(self.ledger)):
+            description = self.ledger[i]["description"]
+            amount = str(self.ledger[i]["amount"])
+
+            # Check if the amount is an integer to add decimals
+            if '.' not in amount:
+                amount += '.00'
 
             # Validate the char limit of description
             if len(description) > max_len_dsc:
-                description = description[:max_len_dsc-1]
+                description = description[:max_len_dsc]
             else:
                 description += ' ' * (max_len_dsc - len(description))
 
@@ -167,7 +176,8 @@ def create_spend_chart(categories):
     total = sum(data.values())
 
     # Order (reverse) the dictionary value
-    for key in sorted(data, key=data.get):
+    # for key in sorted(data, key=data.get):
+    for key in data:
         # Get the percentage
         percentage = round((data[key] / total) * 100, 0)
         # To round down, get the decimal value and then multiply by 10
@@ -191,14 +201,14 @@ def create_spend_chart(categories):
             if ordered_data[key] >= perc:
                 message += 'o  '
             else:
-                break
+                message += '   '
 
         message += '\n'
 
     # First, add some chars according to the format
     # It is 3 hypens per each category plus the initial hypen
     # And new line
-    message += ' ' * 4 + ' ' + '---' * (len(categories)) + '\n'
+    message += ' ' * 4 + '-' + '---' * (len(categories)) + '\n'
 
     # Add text in vertical orientation
     # This for goes to the index of longest key
@@ -215,5 +225,8 @@ def create_spend_chart(categories):
                 message += ' ' * 3
 
         message += '\n'
+
+    # Delete the extra new line char in the end
+    message = message[:len(message)-1]
 
     return message
