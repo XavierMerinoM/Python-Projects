@@ -1,3 +1,3 @@
 # Python Projects
 
-Basic Python projects to get the certifications of Free Code Camp.
+Collection of basic Python projects completed to obtain certifications and improve skills.
