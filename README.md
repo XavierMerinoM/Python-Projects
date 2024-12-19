@@ -1,3 +1,3 @@
-# FreeCodeCamp-Projects
+# Python Projects
 
-Solved excercises to get the certifications of Free Code Camp
+Basic Python projects to get the certifications of Free Code Camp.
