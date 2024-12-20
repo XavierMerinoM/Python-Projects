@@ -1,0 +1,3 @@
+# Weather Visualizer
+
+This project creates a web app to visualize weather data using Python and Streamlit. It covers important concepts like file handling, error management, and data visualization. The app pulls current and past weather data from the Open-Meteo API, allowing users to explore climate tendencies over a chosen period. Users can save the fetched data in CSV files for later use and upload these files for analysis. The app displays important metrics, such as temperature and humidity, using informative graphs with Matplotlib. It also handles missing or inconsistent data to ensure accuracy. This project shows how programming concepts are used to build an easy-to-use platform for exploring weather data and learning about climate patterns through dynamic visuals.
